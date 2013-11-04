@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>PiaproClient</id>
-    <version>$version$</version>
+    <version>1.0.1.0</version>
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
@@ -10,6 +10,7 @@
     <description>Simple .NET client for retrieving song post information from Piapro (http://piapro.jp).</description>
     <releaseNotes>Some cleanup, updated nuget description.</releaseNotes>
     <copyright>Copyright 2013</copyright>
+	<projectUrl>https://github.com/riipah/piapro-dotnet</projectUrl>
     <tags>Piapro</tags>
 	  <dependencies>
 		  <dependency id="HtmlAgilityPack" version="1.4.6.0" />
