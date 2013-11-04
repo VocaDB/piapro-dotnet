@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using HtmlAgilityPack;
 
 namespace PiaproClient.Tests.TestSupport {
-
+	
+	/// <summary>
+	/// Helper methods for managing resources
+	/// </summary>
 	public static class ResourceHelper {
 
 		public static Stream GetFileStream(string fileName) {
 
 			var asm = typeof(ResourceHelper).Assembly;
-			//var s = asm.GetManifestResourceNames();
 			return asm.GetManifestResourceStream(asm.GetName().Name + ".TestData." + fileName);
 
 		}

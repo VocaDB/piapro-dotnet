@@ -7,9 +7,12 @@ using HtmlAgilityPack;
 
 namespace PiaproClient {
 
+	/// <summary>
+	/// Client for accessing Piapro.
+	/// </summary>
 	public class PiaproClient {
 
-		public static int? ParseLength(string lengthStr) {
+		private static int? ParseLength(string lengthStr) {
 
 			if (string.IsNullOrEmpty(lengthStr))
 				return null;
@@ -70,7 +73,7 @@ namespace PiaproClient {
 		/// </summary>
 		/// <param name="partialLink">Partial URL. Can be null.</param>
 		/// <returns>Full URL including http://. Can be null if source was null.</returns>
-		public static string MakeLink(string partialLink) {
+		private static string MakeLink(string partialLink) {
 
 			if (string.IsNullOrEmpty(partialLink))
 				return partialLink;
@@ -96,7 +99,18 @@ namespace PiaproClient {
 		/// <param name="doc">HTML document. Cannot be null.</param>
 		/// <param name="url">URL of the post. Cannot be null or empty.</param>
 		/// <returns>Query result. Cannot be null.</returns>
+		/// <remarks>
+		/// At least ID and title will be parsed.
+		/// Author and length are optional.
+		/// </remarks>
+		/// <exception cref="PiaproException">If the query failed.</exception>
 		public AudioPostQueryResult ParseDocument(HtmlDocument doc, string url) {
+
+			if (doc == null)
+				throw new ArgumentNullException("doc");
+
+			if (string.IsNullOrEmpty(url))
+				throw new ArgumentException("URL cannot be null or empty", "url");
 
 			var dataElem = doc.DocumentNode.SelectSingleNode("//div[@class = 'dtl_data']");
 
@@ -136,6 +150,10 @@ namespace PiaproClient {
 		/// </summary>
 		/// <param name="url">URL to Piapro post. Cannot be null or empty..</param>
 		/// <returns>Result of the query. Cannot be null.</returns>
+		/// <remarks>
+		/// At least ID and title will be parsed.
+		/// Author and length are optional.
+		/// </remarks>
 		/// <exception cref="PiaproException">If the query failed.</exception>
 		public AudioPostQueryResult ParseByUrl(string url) {
 

@@ -7,8 +7,8 @@
     <authors>$author$</authors>
     <owners>$author$</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>.NET client for retrieving song information from Piapro.</description>
-    <releaseNotes>Initial version.</releaseNotes>
+    <description>Simple .NET client for retrieving song post information from Piapro (http://piapro.jp).</description>
+    <releaseNotes>Some cleanup, updated nuget description.</releaseNotes>
     <copyright>Copyright 2013</copyright>
     <tags>Piapro</tags>
 	  <dependencies>
