@@ -46,6 +46,7 @@
     <Compile Include="AudioPostQueryResult.cs" />
     <Compile Include="PiaproClient.cs" />
     <Compile Include="PiaproException.cs" />
+    <Compile Include="PiaproUrlHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
