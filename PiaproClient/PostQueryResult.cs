@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Result of a song post parsing.
 	/// </summary>
-	public class AudioPostQueryResult {
+	public class PostQueryResult {
 
 		/// <summary>
 		/// Author name, for example "ハチ".
@@ -24,6 +24,11 @@
 		public int? LengthSeconds { get; set; }
 
 		/// <summary>
+		/// Type of post.
+		/// </summary>
+		public PostType PostType { get; set; }
+
+		/// <summary>
 		/// Post title, for example "マトリョシカ　オケ".
 		/// Cannot be null or empty.
 		/// </summary>
@@ -34,6 +39,16 @@
 		/// Cannot be null or empty.
 		/// </summary>
 		public string Url { get; set; }
+
+	}
+
+	public enum PostType {
+		
+		Audio,
+
+		Illustration,
+
+		Other
 
 	}
 

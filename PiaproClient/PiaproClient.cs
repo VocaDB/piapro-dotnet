@@ -85,7 +85,7 @@ namespace PiaproClient {
 
 		}
 
-		private AudioPostQueryResult ParseByHtmlStream(Stream htmlStream, Encoding encoding, string url) {
+		private PostQueryResult ParseByHtmlStream(Stream htmlStream, Encoding encoding, string url) {
 
 			var doc = new HtmlDocument();
 			doc.Load(htmlStream, encoding);
@@ -104,7 +104,7 @@ namespace PiaproClient {
 		/// Author and length are optional.
 		/// </remarks>
 		/// <exception cref="PiaproException">If the query failed.</exception>
-		public AudioPostQueryResult ParseDocument(HtmlDocument doc, string url) {
+		public PostQueryResult ParseDocument(HtmlDocument doc, string url) {
 
 			if (doc == null)
 				throw new ArgumentNullException("doc");
@@ -113,12 +113,15 @@ namespace PiaproClient {
 				throw new ArgumentException("URL cannot be null or empty", "url");
 
 			var dataElem = doc.DocumentNode.SelectSingleNode("//div[@class = 'dtl_data']");
+			var postType = PostType.Other;
+			int? length = null;
 
-			if (dataElem == null || !dataElem.InnerHtml.Contains("/music/")) {
-				throw new PiaproException("Content type indicates this isn't an audio file.");
+			if (dataElem != null && dataElem.InnerHtml.Contains("/music/")) {
+				postType = PostType.Audio;
+				length = GetLength(dataElem);
+			} else if (dataElem != null && dataElem.InnerHtml.Contains("/illust/")) {
+				postType = PostType.Illustration;
 			}
-
-			var length = GetLength(dataElem);
 
 			var idElem = doc.DocumentNode.SelectSingleNode("//input[@name = 'id']");
 
@@ -139,8 +142,8 @@ namespace PiaproClient {
 			var authorElem = doc.DocumentNode.SelectSingleNode("//div[@class = 'dtl_by_name']/a");
 			var author = (authorElem != null ? authorElem.InnerText : string.Empty);
 
-			return new AudioPostQueryResult {
-				Author = author, Id = contentId, LengthSeconds = length, Title = title, Url = url
+			return new PostQueryResult {
+				Author = author, Id = contentId, LengthSeconds = length, PostType = postType, Title = title, Url = url
 			};
 
 		}
@@ -155,7 +158,7 @@ namespace PiaproClient {
 		/// Author and length are optional.
 		/// </remarks>
 		/// <exception cref="PiaproException">If the query failed.</exception>
-		public AudioPostQueryResult ParseByUrl(string url) {
+		public PostQueryResult ParseByUrl(string url) {
 
 			if (string.IsNullOrEmpty(url))
 				throw new ArgumentException("URL cannot be null or empty", "url");

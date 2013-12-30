@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioPostQueryResult.cs" />
+    <Compile Include="PostQueryResult.cs" />
     <Compile Include="PiaproClient.cs" />
     <Compile Include="PiaproException.cs" />
     <Compile Include="PiaproUrlHelper.cs" />

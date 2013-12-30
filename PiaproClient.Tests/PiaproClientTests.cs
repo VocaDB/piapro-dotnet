@@ -17,7 +17,7 @@ namespace PiaproClient.Tests {
 			}
 		}
 
-		private AudioPostQueryResult ParseDocument() {
+		private PostQueryResult ParseDocument() {
 			return new PiaproClient().ParseDocument(SongDocument, "http://");
 		}
 
@@ -39,6 +39,11 @@ namespace PiaproClient.Tests {
 		[TestMethod]
 		public void Author() {
 			Assert.AreEqual("ハチ", ParseDocument().Author, "Author");
+		}
+
+		[TestMethod]
+		public void PostType_Audio() {
+			Assert.AreEqual(PostType.Audio, ParseDocument().PostType, "PostType");
 		}
 
 	}
