@@ -27,9 +27,23 @@ namespace PiaproClient.Tests {
 		}
 
 		[TestMethod]
+		public void IsValidContentUrl_WithoutHttp() {
+			
+			TestIsValidContentUrl("piapro.jp/content/abcd1234efg", true);
+
+		}
+
+		[TestMethod]
 		public void IsValidContentUrl_NotValid() {
 			
 			TestIsValidContentUrl("http://piapro.jp/", false);
+
+		}
+
+		[TestMethod]
+		public void IsValidContentUrl_NotPiaproUrl() {
+			
+			TestIsValidContentUrl("http://google.com/", false);
 
 		}
 

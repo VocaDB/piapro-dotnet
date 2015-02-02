@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace PiaproClient {
 
@@ -8,10 +7,7 @@ namespace PiaproClient {
 	/// </summary>
 	public static class PiaproUrlHelper {
 
-		public static readonly string[] PiaproUrlRegexes = {
-			@"piapro.jp/t/([\w\-]+)",		// Short URLs
-			@"piapro.jp/content/([\w\-]+)"	// Long URLs
-		};
+		public const string PiaproUrlRegex = @"^(?:http://)?piapro.jp/(?:t|content)?/([\w\-]+)";
 
 		/// <summary>
 		/// Tests whether an URL is a valid Piapro content URL.
@@ -23,7 +19,21 @@ namespace PiaproClient {
 			if (string.IsNullOrEmpty(url))
 				return false;
 
-			return PiaproUrlRegexes.Any(r => Regex.IsMatch(url, r, RegexOptions.IgnoreCase));
+			return Regex.IsMatch(url, PiaproUrlRegex, RegexOptions.IgnoreCase);
+
+		}
+
+		public static bool TryGetUrl(string str, out string url) {
+
+			var match = Regex.Match(str, PiaproUrlRegex);
+
+			if (match.Success) {
+				url = match.Value;					
+				return true;
+			}
+
+			url = string.Empty;
+			return false;
 
 		}
 
