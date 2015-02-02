@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 
 namespace PiaproClient {
@@ -145,6 +146,53 @@ namespace PiaproClient {
 			return new PostQueryResult {
 				Author = author, Id = contentId, LengthSeconds = length, PostType = postType, Title = title, Url = url
 			};
+
+		}
+
+		/// <summary>
+		/// Parses a Piapro post specified by an URL.
+		/// </summary>
+		/// <param name="url">URL to Piapro post. Cannot be null or empty..</param>
+		/// <returns>Result of the query. Cannot be null.</returns>
+		/// <remarks>
+		/// At least ID and title will be parsed.
+		/// Author and length are optional.
+		/// </remarks>
+		/// <exception cref="PiaproException">If the query failed.</exception>
+		public async Task<PostQueryResult> ParseByUrlAsync(string url) {
+			
+			if (string.IsNullOrEmpty(url))
+				throw new ArgumentException("URL cannot be null or empty", "url");
+
+			WebRequest request;
+			try {
+				request = WebRequest.Create(MakeLink(url));
+			} catch (UriFormatException x) {
+				throw new PiaproException("Invalid Piapro URL", x);
+			}
+
+			request.Timeout = 10000;
+
+			var task = Task.Factory.FromAsync<WebResponse>(request.BeginGetResponse,
+				request.EndGetResponse, null);
+
+			WebResponse response;
+
+			try {
+				response = await task;
+			} catch (WebException x) {
+				throw new PiaproException("Unable to get a response from the server, try again later", x);
+			}
+
+			var enc = GetEncoding(response.Headers[HttpResponseHeader.ContentEncoding]);
+
+			try {
+				using (var stream = response.GetResponseStream()) {
+					return ParseByHtmlStream(stream, enc, url);
+				}
+			} finally {
+				response.Close();
+			}
 
 		}
 
