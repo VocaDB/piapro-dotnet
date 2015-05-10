@@ -47,6 +47,25 @@ namespace PiaproClient {
 
 		}
 
+		private DateTime? GetDate(HtmlNode dataElem) {
+
+			if (dataElem == null)
+				return null;
+
+			var match = Regex.Match(dataElem.InnerHtml, @"投稿日時.+(\d\d\d\d/\d\d/\d\d \d\d:\d\d)"); // "2015/05/06 00:44"
+
+			if (!match.Success)
+				return null;
+
+			DateTime result;
+
+			if (DateTime.TryParse(match.Groups[1].Value, out result))
+				return result;
+			else
+				return null;
+
+		}
+
 		private int? GetLength(HtmlNode dataElem) {
 
 			if (dataElem == null)
@@ -124,6 +143,8 @@ namespace PiaproClient {
 				postType = PostType.Illustration;
 			}
 
+			var date = GetDate(dataElem);
+
 			var idElem = doc.DocumentNode.SelectSingleNode("//input[@name = 'id']");
 
 			if (idElem == null) {
@@ -144,7 +165,8 @@ namespace PiaproClient {
 			var author = (authorElem != null ? authorElem.InnerText : string.Empty);
 
 			return new PostQueryResult {
-				Author = author, Id = contentId, LengthSeconds = length, PostType = postType, Title = title, Url = url
+				Author = author, Id = contentId, LengthSeconds = length, PostType = postType, Title = title, Url = url,
+				Date = date
 			};
 
 		}

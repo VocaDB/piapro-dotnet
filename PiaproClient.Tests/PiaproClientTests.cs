@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using HtmlAgilityPack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PiaproClient.Tests.TestSupport;
@@ -44,6 +45,11 @@ namespace PiaproClient.Tests {
 		[TestMethod]
 		public void PostType_Audio() {
 			Assert.AreEqual(PostType.Audio, ParseDocument().PostType, "PostType");
+		}
+
+		[TestMethod]
+		public void Date() {
+			Assert.AreEqual(new DateTime(2010, 8, 21, 19, 9, 0), ParseDocument().Date, "Date");
 		}
 
 	}

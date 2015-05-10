@@ -1,4 +1,6 @@
-﻿namespace PiaproClient {
+﻿using System;
+
+namespace PiaproClient {
 
 	/// <summary>
 	/// Result of a song post parsing.
@@ -10,6 +12,11 @@
 		/// Cannot be null. Can be empty if author information could not be parsed.
 		/// </summary>
 		public string Author { get; set; }
+
+		/// <summary>
+		/// Post publish date.
+		/// </summary>
+		public DateTime? Date { get; set; }
 
 		/// <summary>
 		/// Post ID in the long format, for example "61zc7sceslg04gcx".
