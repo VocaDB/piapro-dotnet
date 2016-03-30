@@ -71,7 +71,7 @@ namespace PiaproClient {
 			if (dataElem == null)
 				return null;
 
-			var lengthMatch = Regex.Match(dataElem.InnerHtml, @"タイム／サイズ.+(\d\d:\d\d)");
+			var lengthMatch = Regex.Match(dataElem.InnerHtml, @"タイム/サイズ.+(\d\d:\d\d)");
 
 			if (!lengthMatch.Success)
 				return null;
@@ -113,6 +113,16 @@ namespace PiaproClient {
 
 		}
 
+		private string RemoveHonorific(string name) {
+
+			if (string.IsNullOrEmpty(name))
+				return name;
+
+			var match = Regex.Match(name, @"(\w+)さん");
+			return match.Success ? match.Groups[1].Value : name;
+
+		}
+
 		/// <summary>
 		/// Parses a Piapro HTML document.
 		/// </summary>
@@ -145,15 +155,15 @@ namespace PiaproClient {
 
 			var date = GetDate(dataElem);
 
-			var idElem = doc.DocumentNode.SelectSingleNode("//input[@name = 'id']");
+			var relatedMovieSpan = doc.DocumentNode.SelectSingleNode("//a[starts-with(@href, \"http://piapro.jp/content/relate_movie/\")]");
+			var relatedMovieRegex = Regex.Match(relatedMovieSpan.Attributes["href"].Value, @"http://piapro\.jp/content/relate_movie/\?id=([\d\w]+)");
+			var contentId = relatedMovieRegex.Success ? relatedMovieRegex.Groups[1].Value : null;
 
-			if (idElem == null) {
+			if (contentId == null) {
 				throw new PiaproException("Could not find id element on page.");				
 			}
 
-			var contentId = idElem.GetAttributeValue("value", string.Empty);
-
-			var titleElem = doc.DocumentNode.SelectSingleNode("//h1[@class = 'dtl_title']");
+			var titleElem = doc.DocumentNode.SelectSingleNode("//h1[@class = 'works-title']");
 
 			if (titleElem == null) {
 				throw new PiaproException("Could not find title element on page.");								
@@ -161,8 +171,8 @@ namespace PiaproClient {
 
 			var title = HtmlEntity.DeEntitize(titleElem.InnerText).Trim();
 
-			var authorElem = doc.DocumentNode.SelectSingleNode("//div[@class = 'dtl_by_name']/a");
-			var author = (authorElem != null ? authorElem.InnerText : string.Empty);
+			var authorElem = doc.DocumentNode.SelectSingleNode("//div[@id = 'main_name']/h2/a");
+			var author = (authorElem != null ? RemoveHonorific(authorElem.InnerText) : string.Empty);
 
 			return new PostQueryResult {
 				Author = author, Id = contentId, LengthSeconds = length, PostType = postType, Title = title, Url = url,
