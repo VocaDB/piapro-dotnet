@@ -118,7 +118,7 @@ namespace PiaproClient {
 			if (string.IsNullOrEmpty(name))
 				return name;
 
-			var match = Regex.Match(name, @"(\w+)さん");
+			var match = Regex.Match(name, @"^(\w+)さん$");
 			return match.Success ? match.Groups[1].Value : name;
 
 		}
@@ -137,10 +137,10 @@ namespace PiaproClient {
 		public PostQueryResult ParseDocument(HtmlDocument doc, string url) {
 
 			if (doc == null)
-				throw new ArgumentNullException("doc");
+				throw new ArgumentNullException(nameof(doc));
 
 			if (string.IsNullOrEmpty(url))
-				throw new ArgumentException("URL cannot be null or empty", "url");
+				throw new ArgumentException("URL cannot be null or empty", nameof(url));
 
 			var dataElem = doc.DocumentNode.SelectSingleNode("//div[@class = 'dtl_data']");
 			var postType = PostType.Other;
@@ -194,7 +194,7 @@ namespace PiaproClient {
 		public async Task<PostQueryResult> ParseByUrlAsync(string url) {
 			
 			if (string.IsNullOrEmpty(url))
-				throw new ArgumentException("URL cannot be null or empty", "url");
+				throw new ArgumentException("URL cannot be null or empty", nameof(url));
 
 			WebRequest request;
 			try {
