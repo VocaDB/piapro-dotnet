@@ -12,19 +12,26 @@ namespace PiaproClient.Tests {
 	[TestClass]
 	public class PiaproClientTests {
 
-		private HtmlDocument SongDocument {
-			get {
-				return ResourceHelper.ReadHtmlDocument("piapro.htm", Encoding.UTF8);
-			}
-		}
+		private HtmlDocument SongDocument => ResourceHelper.ReadHtmlDocument("piapro.htm", Encoding.UTF8);
+
+		private HtmlDocument SongDocumentWithWww => ResourceHelper.ReadHtmlDocument("piapro2.html", Encoding.UTF8);
 
 		private PostQueryResult ParseDocument() {
 			return new PiaproClient().ParseDocument(SongDocument, "http://");
 		}
 
+		private PostQueryResult ParseDocumentWithWww() {
+			return new PiaproClient().ParseDocument(SongDocumentWithWww, "http://");
+		}
+
 		[TestMethod]
 		public void Id() {
 			Assert.AreEqual("61zc7sceslg04gcx", ParseDocument().Id, "Id");
+		}
+
+		[TestMethod]
+		public void Id_RelatedUrlHasWww() {
+			Assert.AreEqual("c2s4xvsyt8xanbl7", ParseDocumentWithWww().Id, "Id");
 		}
 
 		[TestMethod]

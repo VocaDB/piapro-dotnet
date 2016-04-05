@@ -155,9 +155,12 @@ namespace PiaproClient {
 
 			var date = GetDate(dataElem);
 
-			var relatedMovieSpan = doc.DocumentNode.SelectSingleNode("//a[starts-with(@href, \"http://piapro.jp/content/relate_movie/\")]");
-			var relatedMovieRegex = Regex.Match(relatedMovieSpan.Attributes["href"].Value, @"http://piapro\.jp/content/relate_movie/\?id=([\d\w]+)");
-			var contentId = relatedMovieRegex.Success ? relatedMovieRegex.Groups[1].Value : null;
+			// Find both piapro.jp and www.piapro.jp
+			var relatedMovieSpan = doc.DocumentNode.SelectSingleNode(
+				"//a[starts-with(@href, \"http://piapro.jp/content/relate_movie/\")]|//a[starts-with(@href, \"http://www.piapro.jp/content/relate_movie/\")]");
+
+			var relatedMovieMatch = relatedMovieSpan != null ? Regex.Match(relatedMovieSpan.Attributes["href"].Value, @"http://(?:www\.)?piapro\.jp/content/relate_movie/\?id=([\d\w]+)") : null;
+			var contentId = relatedMovieMatch != null && relatedMovieMatch.Success ? relatedMovieMatch.Groups[1].Value : null;
 
 			if (contentId == null) {
 				throw new PiaproException("Could not find id element on page.");				
