@@ -59,6 +59,12 @@ namespace PiaproClient.Tests {
 			Assert.AreEqual(new DateTime(2010, 8, 21, 19, 9, 0), ParseDocument().Date, "Date");
 		}
 
+		[TestMethod]
+		public void RemoveHonorific_SpecialCharacters() {
+			var result = new PiaproClient().RemoveHonorific("Rin（ぎんすけ）さん");
+			Assert.AreEqual("Rin（ぎんすけ）", result, "result");
+		}
+
 	}
 
 }

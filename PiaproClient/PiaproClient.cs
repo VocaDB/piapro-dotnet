@@ -113,12 +113,17 @@ namespace PiaproClient {
 
 		}
 
-		private string RemoveHonorific(string name) {
+		/// <summary>
+		/// Removes "さん" from the username, which piapro appends automatically.
+		/// </summary>
+		/// <param name="name">Username with possible honorific, for example "Rinさん".</param>
+		/// <returns>Úsername without the honorific, for example "Rin".</returns>
+		public string RemoveHonorific(string name) {
 
 			if (string.IsNullOrEmpty(name))
 				return name;
 
-			var match = Regex.Match(name, @"^(\w+)さん$");
+			var match = Regex.Match(name, @"^(.+)さん$");
 			return match.Success ? match.Groups[1].Value : name;
 
 		}
