@@ -174,7 +174,7 @@ namespace PiaproClient {
 
 			var title = HtmlEntity.DeEntitize(titleElem.InnerText).Trim();
 
-			var authorElem = doc.DocumentNode.SelectSingleNode("//div[@id = 'main_name']/h2/a");
+			var authorElem = doc.DocumentNode.SelectSingleNode("//h2[@class = 'userbar-name']/a");
 			var author = (authorElem != null ? RemoveHonorific(authorElem.InnerText) : string.Empty);
 
 			return new PostQueryResult {
