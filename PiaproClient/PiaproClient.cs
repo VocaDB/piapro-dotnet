@@ -182,9 +182,13 @@ namespace PiaproClient {
 			var authorElem = doc.DocumentNode.SelectSingleNode("//h2[@class = 'userbar-name']/a");
 			var author = (authorElem != null ? RemoveHonorific(authorElem.InnerText) : string.Empty);
 
-			return new PostQueryResult {
+            var uploadTimestampElem = doc.DocumentNode.SelectSingleNode("//script[@type = 'application/javascript']");
+            var uploadTimestampMatch = uploadTimestampElem != null ? Regex.Match(uploadTimestampElem.InnerText, "createDate\\s*:\\s*['\"]([0-9]{14})['\"]") : null;
+            var uploadTimestamp = uploadTimestampMatch != null && uploadTimestampMatch.Success ? uploadTimestampMatch.Groups[1].Value : null;
+
+            return new PostQueryResult {
 				Author = author, Id = contentId, LengthSeconds = length, PostType = postType, Title = title, Url = url,
-				Date = date
+				Date = date, UploadTimestamp = uploadTimestamp
 			};
 
 		}

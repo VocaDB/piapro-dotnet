@@ -47,6 +47,12 @@ namespace PiaproClient {
 		/// </summary>
 		public string Url { get; set; }
 
+        /// <summary>
+        /// Upload timestamp. Required for the HTML5 player.
+        /// For example "20140906145909"
+        /// </summary>
+        public string UploadTimestamp { get; set; }
+
 	}
 
 	public enum PostType {
