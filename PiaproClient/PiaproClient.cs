@@ -171,7 +171,7 @@ namespace PiaproClient {
 				throw new PiaproException("Could not find id element on page.");				
 			}
 
-			var titleElem = doc.DocumentNode.SelectSingleNode("//h1[@class = 'works-title']");
+			var titleElem = doc.DocumentNode.SelectSingleNode("//h1[@class = 'works-title' or @class = 'award-title']");
 
 			if (titleElem == null) {
 				throw new PiaproException("Could not find title element on page.");								

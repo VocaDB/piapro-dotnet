@@ -16,12 +16,18 @@ namespace PiaproClient.Tests {
 
 		private HtmlDocument SongDocumentWithWww => ResourceHelper.ReadHtmlDocument("piapro2.html", Encoding.UTF8);
 
+		private HtmlDocument SongDocumentWithAwardTitle => ResourceHelper.ReadHtmlDocument("piapro_award.html", Encoding.UTF8);
+
 		private PostQueryResult ParseDocument() {
 			return new PiaproClient().ParseDocument(SongDocument, "http://");
 		}
 
 		private PostQueryResult ParseDocumentWithWww() {
 			return new PiaproClient().ParseDocument(SongDocumentWithWww, "http://");
+		}
+
+		private PostQueryResult ParseDocumentWithAwardTitle() {
+			return new PiaproClient().ParseDocument(SongDocumentWithAwardTitle, "http://");
 		}
 
 		[TestMethod]
@@ -68,6 +74,12 @@ namespace PiaproClient.Tests {
 		public void RemoveHonorific_SpecialCharacters() {
 			var result = new PiaproClient().RemoveHonorific("Rin（ぎんすけ）さん");
 			Assert.AreEqual("Rin（ぎんすけ）", result, "result");
+		}
+
+		[TestMethod]
+		public void Title_Award() {
+			var result = ParseDocumentWithAwardTitle();
+			Assert.AreEqual("七夕恋歌", result?.Title, "result");
 		}
 
 	}
