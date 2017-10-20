@@ -2,13 +2,13 @@
 <package >
   <metadata>
     <id>PiaproClient</id>
-    <version>1.2.0.0</version>
+    <version>1.2.1.0</version>
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Simple .NET client for retrieving song post information from Piapro (http://piapro.jp).</description>
-    <releaseNotes>Added support for upload timestamp.</releaseNotes>
+    <releaseNotes>Support for award-title.</releaseNotes>
     <copyright>Copyright 2017</copyright>
 	<projectUrl>https://github.com/riipah/piapro-dotnet</projectUrl>
     <tags>Piapro</tags>
