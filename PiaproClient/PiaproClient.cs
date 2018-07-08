@@ -1,6 +1,9 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -213,34 +216,35 @@ namespace PiaproClient {
 			if (string.IsNullOrEmpty(url))
 				throw new ArgumentException("URL cannot be null or empty", nameof(url));
 
-			WebRequest request;
+			Uri uri;
 			try {
-				request = WebRequest.Create(MakeLink(url));
+				uri = new Uri(MakeLink(url));
 			} catch (UriFormatException x) {
 				throw new PiaproException("Invalid Piapro URL", x);
 			}
 
-			request.Timeout = 10000;
+			HttpResponseMessage response;
+			using (var client = new HttpClient()) {
 
-			var task = Task.Factory.FromAsync<WebResponse>(request.BeginGetResponse,
-				request.EndGetResponse, null);
+				client.Timeout = TimeSpan.FromSeconds(10000);
 
-			WebResponse response;
-
-			try {
-				response = await task;
-			} catch (WebException x) {
-				throw new PiaproException("Unable to get a response from the server, try again later", x);
-			}
-
-			var enc = GetEncoding(response.Headers[HttpResponseHeader.ContentEncoding]);
-
-			try {
-				using (var stream = response.GetResponseStream()) {
-					return ParseByHtmlStream(stream, enc, url);
+				try {
+					response = await client.GetAsync(uri);
+					response.EnsureSuccessStatusCode();
+				} catch (HttpRequestException x) {
+					throw new PiaproException("Unable to get a response from the server, try again later", x);
 				}
-			} finally {
-				response.Close();
+
+				var enc = GetEncoding(response.Headers.GetValues("Content-Encoding").FirstOrDefault());
+
+				try {
+					using (var stream = await response.Content.ReadAsStreamAsync()) {
+						return ParseByHtmlStream(stream, enc, url);
+					}
+				} finally {
+					response.Dispose();
+				}
+
 			}
 
 		}
