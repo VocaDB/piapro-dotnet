@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using HtmlAgilityPack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,23 +12,17 @@ namespace PiaproClient.Tests {
 	[TestClass]
 	public class PiaproClientTests {
 
+		private readonly PiaproClient client = new PiaproClient();
+
 		private HtmlDocument SongDocument => ResourceHelper.ReadHtmlDocument("piapro.htm", Encoding.UTF8);
-
 		private HtmlDocument SongDocumentWithWww => ResourceHelper.ReadHtmlDocument("piapro2.html", Encoding.UTF8);
-
 		private HtmlDocument SongDocumentWithAwardTitle => ResourceHelper.ReadHtmlDocument("piapro_award.html", Encoding.UTF8);
+		private HtmlDocument SongDocumentWithHttps => ResourceHelper.ReadHtmlDocument("piapro_https.html", Encoding.UTF8);
 
-		private PostQueryResult ParseDocument() {
-			return new PiaproClient().ParseDocument(SongDocument, "http://");
-		}
-
-		private PostQueryResult ParseDocumentWithWww() {
-			return new PiaproClient().ParseDocument(SongDocumentWithWww, "http://");
-		}
-
-		private PostQueryResult ParseDocumentWithAwardTitle() {
-			return new PiaproClient().ParseDocument(SongDocumentWithAwardTitle, "http://");
-		}
+		private PostQueryResult ParseDocument() => client.ParseDocument(SongDocument, "http://");
+		private PostQueryResult ParseDocumentWithWww() => client.ParseDocument(SongDocumentWithWww, "http://");
+		private PostQueryResult ParseDocumentWithAwardTitle() => client.ParseDocument(SongDocumentWithAwardTitle, "http://");
+		private PostQueryResult ParseDocumentWithHttps() => client.ParseDocument(SongDocumentWithHttps, "https://");
 
 		[TestMethod]
 		public void Id() {
@@ -80,6 +74,12 @@ namespace PiaproClient.Tests {
 		public void Title_Award() {
 			var result = ParseDocumentWithAwardTitle();
 			Assert.AreEqual("七夕恋歌", result?.Title, "result");
+		}
+
+		[TestMethod]
+		public void Https() {
+			var result = ParseDocumentWithHttps();
+			Assert.AreEqual("gau3f8nl0uh84f4a", result.Id, "Id");
 		}
 
 	}

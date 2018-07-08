@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -161,10 +161,15 @@ namespace PiaproClient {
 			var date = GetDate(dataElem);
 
 			// Find both piapro.jp and www.piapro.jp
+			// Note: HtmlAgilityPack does not support regex (XPath 2.0) :(
 			var relatedMovieSpan = doc.DocumentNode.SelectSingleNode(
-				"//a[starts-with(@href, \"http://piapro.jp/content/relate_movie/\")]|//a[starts-with(@href, \"http://www.piapro.jp/content/relate_movie/\")]");
+				"//a[starts-with(@href, \"http://piapro.jp/content/relate_movie/\")]" +
+				"|//a[starts-with(@href, \"http://www.piapro.jp/content/relate_movie/\")]" +
+                "|//a[starts-with(@href, \"https://piapro.jp/content/relate_movie/\")]" +
+				"|//a[starts-with(@href, \"https://www.piapro.jp/content/relate_movie/\")]"
+			);
 
-			var relatedMovieMatch = relatedMovieSpan != null ? Regex.Match(relatedMovieSpan.Attributes["href"].Value, @"http://(?:www\.)?piapro\.jp/content/relate_movie/\?id=([\d\w]+)") : null;
+			var relatedMovieMatch = relatedMovieSpan != null ? Regex.Match(relatedMovieSpan.Attributes["href"].Value, @"https?://(?:www\.)?piapro\.jp/content/relate_movie/\?id=([\d\w]+)") : null;
 			var contentId = relatedMovieMatch != null && relatedMovieMatch.Success ? relatedMovieMatch.Groups[1].Value : null;
 
 			if (contentId == null) {
