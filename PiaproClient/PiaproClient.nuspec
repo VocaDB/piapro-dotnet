@@ -2,14 +2,14 @@
 <package >
   <metadata>
     <id>PiaproClient</id>
-    <version>1.2.1.0</version>
+    <version>1.3.0.0</version>
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Simple .NET client for retrieving song post information from Piapro (http://piapro.jp).</description>
-    <releaseNotes>Support for award-title.</releaseNotes>
-    <copyright>Copyright 2017</copyright>
+    <description>Simple .NET client for retrieving song post information from Piapro (https://piapro.jp).</description>
+    <releaseNotes>Support for https, add async using HttpClient.</releaseNotes>
+    <copyright>Copyright 2018</copyright>
 	<projectUrl>https://github.com/riipah/piapro-dotnet</projectUrl>
     <tags>Piapro</tags>
 	  <dependencies>
