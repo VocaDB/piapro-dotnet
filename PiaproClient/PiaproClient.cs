@@ -26,8 +26,7 @@ namespace PiaproClient {
 			if (parts.Length != 2)
 				return null;
 
-			int min, sec;
-			if (!int.TryParse(parts[0], out min) || !int.TryParse(parts[1], out sec))
+			if (!int.TryParse(parts[0], out var min) || !int.TryParse(parts[1], out var sec))
 				return null;
 
 			var totalSec = min * 60 + sec;
@@ -104,7 +103,7 @@ namespace PiaproClient {
 			if (IsFullLink(partialLink))
 				return partialLink;
 
-			return string.Format("http://{0}", partialLink);
+			return string.Format("https://{0}", partialLink);
 
 		}
 

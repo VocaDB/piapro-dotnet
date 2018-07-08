@@ -158,3 +158,4 @@ packages/
 /.vs/config/applicationhost.config
 /Create nuget.cmd
 /.vs/PiaproClient/v15/Server/sqlite3
+/.vs/PiaproClient/DesignTimeBuild/.dtbcache
