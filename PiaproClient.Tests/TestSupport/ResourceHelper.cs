@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
 using HtmlAgilityPack;
 
@@ -27,6 +27,8 @@ namespace PiaproClient.Tests.TestSupport {
 			}
 
 		}
+
+		public const string TestDocumentName = "piapro.htm";
 
 	}
 

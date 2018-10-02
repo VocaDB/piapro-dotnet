@@ -3,9 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 
@@ -16,24 +14,20 @@ namespace PiaproClient {
 	/// </summary>
 	public class PiaproClient {
 
-		private static int? ParseLength(string lengthStr) {
+		/*
+		 * Note: oddly enough, HttpClient is meant to be shared: 
+		 * https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
+		 */
 
-			if (string.IsNullOrEmpty(lengthStr))
-				return null;
+		public PiaproClient() {}
 
-			var parts = lengthStr.Split(':');
-
-			if (parts.Length != 2)
-				return null;
-
-			if (!int.TryParse(parts[0], out var min) || !int.TryParse(parts[1], out var sec))
-				return null;
-
-			var totalSec = min * 60 + sec;
-
-			return totalSec;
-
+		public PiaproClient(HttpClient httpClient) {
+			this.httpClient = httpClient;
 		}
+
+		private readonly HttpClient httpClient;
+
+		private HttpClient HttpClient => httpClient ?? new HttpClient();
 
 		private static Encoding GetEncoding(string encodingStr) {
 
@@ -46,39 +40,6 @@ namespace PiaproClient {
 			} catch (ArgumentException) {
 				return Encoding.UTF8;
 			}
-
-		}
-
-		private DateTime? GetDate(HtmlNode dataElem) {
-
-			if (dataElem == null)
-				return null;
-
-			var match = Regex.Match(dataElem.InnerHtml, @"投稿日時.+(\d\d\d\d/\d\d/\d\d \d\d:\d\d)"); // "2015/05/06 00:44"
-
-			if (!match.Success)
-				return null;
-
-			DateTime result;
-
-			if (DateTime.TryParse(match.Groups[1].Value, out result))
-				return result;
-			else
-				return null;
-
-		}
-
-		private int? GetLength(HtmlNode dataElem) {
-
-			if (dataElem == null)
-				return null;
-
-			var lengthMatch = Regex.Match(dataElem.InnerHtml, @"タイム/サイズ.+(\d\d:\d\d)");
-
-			if (!lengthMatch.Success)
-				return null;
-
-			return ParseLength(lengthMatch.Groups[1].Value);
 
 		}
 
@@ -111,92 +72,7 @@ namespace PiaproClient {
 
 			var doc = new HtmlDocument();
 			doc.Load(htmlStream, encoding);
-			return ParseDocument(doc, url);
-
-		}
-
-		/// <summary>
-		/// Removes "さん" from the username, which piapro appends automatically.
-		/// </summary>
-		/// <param name="name">Username with possible honorific, for example "Rinさん".</param>
-		/// <returns>Úsername without the honorific, for example "Rin".</returns>
-		public string RemoveHonorific(string name) {
-
-			if (string.IsNullOrEmpty(name))
-				return name;
-
-			var match = Regex.Match(name, @"^(.+)さん$");
-			return match.Success ? match.Groups[1].Value : name;
-
-		}
-
-		/// <summary>
-		/// Parses a Piapro HTML document.
-		/// </summary>
-		/// <param name="doc">HTML document. Cannot be null.</param>
-		/// <param name="url">URL of the post. Cannot be null or empty.</param>
-		/// <returns>Query result. Cannot be null.</returns>
-		/// <remarks>
-		/// At least ID and title will be parsed.
-		/// Author and length are optional.
-		/// </remarks>
-		/// <exception cref="PiaproException">If the query failed.</exception>
-		public PostQueryResult ParseDocument(HtmlDocument doc, string url) {
-
-			if (doc == null)
-				throw new ArgumentNullException(nameof(doc));
-
-			if (string.IsNullOrEmpty(url))
-				throw new ArgumentException("URL cannot be null or empty", nameof(url));
-
-			var dataElem = doc.DocumentNode.SelectSingleNode("//div[@class = 'dtl_data']");
-			var postType = PostType.Other;
-			int? length = null;
-
-			if (dataElem != null && dataElem.InnerHtml.Contains("/music/")) {
-				postType = PostType.Audio;
-				length = GetLength(dataElem);
-			} else if (dataElem != null && dataElem.InnerHtml.Contains("/illust/")) {
-				postType = PostType.Illustration;
-			}
-
-			var date = GetDate(dataElem);
-
-			// Find both piapro.jp and www.piapro.jp
-			// Note: HtmlAgilityPack does not support regex (XPath 2.0) :(
-			var relatedMovieSpan = doc.DocumentNode.SelectSingleNode(
-				"//a[starts-with(@href, \"http://piapro.jp/content/relate_movie/\")]" +
-				"|//a[starts-with(@href, \"http://www.piapro.jp/content/relate_movie/\")]" +
-                "|//a[starts-with(@href, \"https://piapro.jp/content/relate_movie/\")]" +
-				"|//a[starts-with(@href, \"https://www.piapro.jp/content/relate_movie/\")]"
-			);
-
-			var relatedMovieMatch = relatedMovieSpan != null ? Regex.Match(relatedMovieSpan.Attributes["href"].Value, @"https?://(?:www\.)?piapro\.jp/content/relate_movie/\?id=([\d\w]+)") : null;
-			var contentId = relatedMovieMatch != null && relatedMovieMatch.Success ? relatedMovieMatch.Groups[1].Value : null;
-
-			if (contentId == null) {
-				throw new PiaproException("Could not find id element on page.");				
-			}
-
-			var titleElem = doc.DocumentNode.SelectSingleNode("//h1[@class = 'works-title' or @class = 'award-title']");
-
-			if (titleElem == null) {
-				throw new PiaproException("Could not find title element on page.");								
-			}
-
-			var title = HtmlEntity.DeEntitize(titleElem.InnerText).Trim();
-
-			var authorElem = doc.DocumentNode.SelectSingleNode("//h2[@class = 'userbar-name']/a");
-			var author = (authorElem != null ? RemoveHonorific(authorElem.InnerText) : string.Empty);
-
-            var uploadTimestampElem = doc.DocumentNode.SelectSingleNode("//script[@type = 'application/javascript']");
-            var uploadTimestampMatch = uploadTimestampElem != null ? Regex.Match(uploadTimestampElem.InnerText, "createDate\\s*:\\s*['\"]([0-9]{14})['\"]") : null;
-            var uploadTimestamp = uploadTimestampMatch != null && uploadTimestampMatch.Success ? uploadTimestampMatch.Groups[1].Value : null;
-
-            return new PostQueryResult {
-				Author = author, Id = contentId, LengthSeconds = length, PostType = postType, Title = title, Url = url,
-				Date = date, UploadTimestamp = uploadTimestamp
-			};
+			return new PiaproParser().ParseDocument(doc, url);
 
 		}
 
@@ -223,28 +99,27 @@ namespace PiaproClient {
 			}
 
 			HttpResponseMessage response;
-			using (var client = new HttpClient()) {
+			var client = HttpClient;
+			client.Timeout = TimeSpan.FromSeconds(10000);
 
-				client.Timeout = TimeSpan.FromSeconds(10000);
-
-				try {
-					response = await client.GetAsync(uri);
-					response.EnsureSuccessStatusCode();
-				} catch (HttpRequestException x) {
-					throw new PiaproException("Unable to get a response from the server, try again later", x);
-				}
-
-				var enc = GetEncoding(response.Headers.GetValues("Content-Encoding").FirstOrDefault());
-
-				try {
-					using (var stream = await response.Content.ReadAsStreamAsync()) {
-						return ParseByHtmlStream(stream, enc, url);
-					}
-				} finally {
-					response.Dispose();
-				}
-
+			try {
+				response = await client.GetAsync(uri);
+				response.EnsureSuccessStatusCode();
+			} catch (HttpRequestException x) {
+				throw new PiaproException("Unable to get a response from the server, try again later", x);
 			}
+
+			response.Content.Headers.TryGetValues("Content-Encoding", out var encodingHeaders);
+			var enc = GetEncoding(encodingHeaders?.FirstOrDefault());
+
+			try {
+				using (var stream = await response.Content.ReadAsStreamAsync()) {
+					return ParseByHtmlStream(stream, enc, url);
+				}
+			} finally {
+				response.Dispose();
+			}
+
 
 		}
 

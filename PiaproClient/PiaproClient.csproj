@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HttpClientFactory.cs" />
+    <Compile Include="PiaproParser.cs" />
     <Compile Include="PostQueryResult.cs" />
     <Compile Include="PiaproClient.cs" />
     <Compile Include="PiaproException.cs" />
