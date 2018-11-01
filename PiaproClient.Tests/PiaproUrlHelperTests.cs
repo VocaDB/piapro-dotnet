@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace PiaproClient.Tests {
 
@@ -13,39 +13,25 @@ namespace PiaproClient.Tests {
 		}
 
 		[TestMethod]
-		public void IsValidContentUrl_ShortUrl() {
-			
-			TestIsValidContentUrl("http://piapro.jp/t/abcd", true);
-
-		}
+		public void IsValidContentUrl_ShortUrl_Http() => TestIsValidContentUrl("http://piapro.jp/t/abcd", true);
 
 		[TestMethod]
-		public void IsValidContentUrl_LongUrl() {
-			
-			TestIsValidContentUrl("http://piapro.jp/content/abcd1234efg", true);
-
-		}
+		public void IsValidContentUrl_ShortUrl_Https() => TestIsValidContentUrl("https://piapro.jp/t/abcd", true);
 
 		[TestMethod]
-		public void IsValidContentUrl_WithoutHttp() {
-			
-			TestIsValidContentUrl("piapro.jp/content/abcd1234efg", true);
-
-		}
+		public void IsValidContentUrl_LongUrl_Http() => TestIsValidContentUrl("http://piapro.jp/content/abcd1234efg", true);
 
 		[TestMethod]
-		public void IsValidContentUrl_NotValid() {
-			
-			TestIsValidContentUrl("http://piapro.jp/", false);
-
-		}
+		public void IsValidContentUrl_LongUrl_Https() => TestIsValidContentUrl("https://piapro.jp/content/abcd1234efg", true);
 
 		[TestMethod]
-		public void IsValidContentUrl_NotPiaproUrl() {
-			
-			TestIsValidContentUrl("http://google.com/", false);
+		public void IsValidContentUrl_WithoutHttp() => TestIsValidContentUrl("piapro.jp/content/abcd1234efg", true);
 
-		}
+		[TestMethod]
+		public void IsValidContentUrl_NotValid() => TestIsValidContentUrl("https://piapro.jp/", false);
+
+		[TestMethod]
+		public void IsValidContentUrl_NotPiaproUrl() => TestIsValidContentUrl("https://google.com/", false);
 
 	}
 }

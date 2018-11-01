@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 
 namespace PiaproClient {
 
@@ -7,7 +7,7 @@ namespace PiaproClient {
 	/// </summary>
 	public static class PiaproUrlHelper {
 
-		public const string PiaproUrlRegex = @"^(?:http://)?piapro.jp/(?:t|content)?/([\w\-]+)";
+		public const string PiaproUrlRegex = @"^(?:https?://)?piapro.jp/(?:t|content)?/([\w\-]+)";
 
 		/// <summary>
 		/// Tests whether an URL is a valid Piapro content URL.

@@ -33,7 +33,7 @@ namespace PiaproClient {
 			if (dataElem == null)
 				return null;
 
-			var match = Regex.Match(dataElem.InnerHtml, @"投稿日時.+(\d\d\d\d/\d\d/\d\d \d\d:\d\d)"); // "2015/05/06 00:44"
+			var match = Regex.Match(dataElem.InnerHtml, @"投稿日.+(\d\d\d\d/\d\d/\d\d \d\d:\d\d:\d\d)"); // "2010/08/21 19:09:15"
 
 			if (!match.Success)
 				return null;
@@ -95,7 +95,7 @@ namespace PiaproClient {
 			if (string.IsNullOrEmpty(url))
 				throw new ArgumentException("URL cannot be null or empty", nameof(url));
 
-			var dataElem = doc.DocumentNode.SelectSingleNode("//div[@class = 'dtl_data']");
+			var dataElem = doc.DocumentNode.SelectSingleNode("//div[@class = 'cd_dtl_data']");
 			var postType = PostType.Other;
 			int? length = null;
 
@@ -125,7 +125,7 @@ namespace PiaproClient {
 				throw new PiaproException("Could not find id element on page.");
 			}
 
-			var titleElem = doc.DocumentNode.SelectSingleNode("//h1[@class = 'works-title' or @class = 'award-title']");
+			var titleElem = doc.DocumentNode.SelectSingleNode("//h1[@class = 'cd_works-title' or @class = 'award-title']");
 
 			if (titleElem == null) {
 				throw new PiaproException("Could not find title element on page.");
@@ -133,7 +133,7 @@ namespace PiaproClient {
 
 			var title = HtmlEntity.DeEntitize(titleElem.InnerText).Trim();
 
-			var authorElem = doc.DocumentNode.SelectSingleNode("//h2[@class = 'userbar-name']/a");
+			var authorElem = doc.DocumentNode.SelectSingleNode("//a[@class = 'cd_user-name']");
 			var author = (authorElem != null ? RemoveHonorific(authorElem.InnerText) : string.Empty);
 
 			var uploadTimestampElem = doc.DocumentNode.SelectSingleNode("//script[@type = 'application/javascript']");

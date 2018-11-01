@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PiaproClient.Tests.TestSupport;
@@ -15,6 +14,9 @@ namespace PiaproClient.Tests {
 
 		private readonly PiaproParser parser = new PiaproParser();
 
+		/// <summary>
+		/// Source: https://piapro.jp/content/61zc7sceslg04gcx
+		/// </summary>
 		private HtmlDocument SongDocument => ResourceHelper.ReadHtmlDocument(ResourceHelper.TestDocumentName, Encoding.UTF8);
 		private HtmlDocument SongDocumentWithWww => ResourceHelper.ReadHtmlDocument("piapro2.html", Encoding.UTF8);
 		private HtmlDocument SongDocumentWithAwardTitle => ResourceHelper.ReadHtmlDocument("piapro_award.html", Encoding.UTF8);
@@ -57,7 +59,7 @@ namespace PiaproClient.Tests {
 
 		[TestMethod]
 		public void Date() {
-			Assert.AreEqual(new DateTime(2010, 8, 21, 19, 9, 0), ParseDocument().Date, "Date");
+			Assert.AreEqual(new DateTime(2010, 8, 21, 19, 9, 15), ParseDocument().Date, "Date");
 		}
 
         [TestMethod]
@@ -75,12 +77,6 @@ namespace PiaproClient.Tests {
 		public void Title_Award() {
 			var result = ParseDocumentWithAwardTitle();
 			Assert.AreEqual("七夕恋歌", result?.Title, "result");
-		}
-
-		[TestMethod]
-		public void Https() {
-			var result = ParseDocumentWithHttps();
-			Assert.AreEqual("gau3f8nl0uh84f4a", result.Id, "Id");
 		}
 
 	}
