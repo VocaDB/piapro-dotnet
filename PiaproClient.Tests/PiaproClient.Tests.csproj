@@ -84,6 +84,9 @@
   <ItemGroup>
     <EmbeddedResource Include="TestData\piapro_https.html" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestData\piapro_norelated.html" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

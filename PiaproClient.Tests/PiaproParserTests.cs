@@ -21,11 +21,17 @@ namespace PiaproClient.Tests {
 		private HtmlDocument SongDocumentWithWww => ResourceHelper.ReadHtmlDocument("piapro2.html", Encoding.UTF8);
 		private HtmlDocument SongDocumentWithAwardTitle => ResourceHelper.ReadHtmlDocument("piapro_award.html", Encoding.UTF8);
 		private HtmlDocument SongDocumentWithHttps => ResourceHelper.ReadHtmlDocument("piapro_https.html", Encoding.UTF8);
+		/// <summary>
+		/// Source: https://piapro.jp/t/Ux8B
+		/// No related_movie element.
+		/// </summary>
+		private HtmlDocument SongDocumentWithNoRelated => ResourceHelper.ReadHtmlDocument("piapro_norelated.html", Encoding.UTF8);
 
 		private PostQueryResult ParseDocument() => parser.ParseDocument(SongDocument, "http://");
 		private PostQueryResult ParseDocumentWithWww() => parser.ParseDocument(SongDocumentWithWww, "http://");
 		private PostQueryResult ParseDocumentWithAwardTitle() => parser.ParseDocument(SongDocumentWithAwardTitle, "http://");
 		private PostQueryResult ParseDocumentWithHttps() => parser.ParseDocument(SongDocumentWithHttps, "https://");
+		private PostQueryResult ParseDocumentWithNoRelated() => parser.ParseDocument(SongDocumentWithNoRelated, "https://");
 
 		[TestMethod]
 		public void Id() {
@@ -35,6 +41,11 @@ namespace PiaproClient.Tests {
 		[TestMethod]
 		public void Id_RelatedUrlHasWww() {
 			Assert.AreEqual("c2s4xvsyt8xanbl7", ParseDocumentWithWww().Id, "Id");
+		}
+
+		[TestMethod]
+		public void Id_NoRelated() {
+			Assert.AreEqual("3c9ofjj7dlwb9gah", ParseDocumentWithNoRelated().Id, "Id");
 		}
 
 		[TestMethod]

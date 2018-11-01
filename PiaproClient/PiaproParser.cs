@@ -115,10 +115,11 @@ namespace PiaproClient {
 				"//a[starts-with(@href, \"http://piapro.jp/content/relate_movie/\")]" +
 				"|//a[starts-with(@href, \"http://www.piapro.jp/content/relate_movie/\")]" +
 				"|//a[starts-with(@href, \"https://piapro.jp/content/relate_movie/\")]" +
-				"|//a[starts-with(@href, \"https://www.piapro.jp/content/relate_movie/\")]"
+				"|//a[starts-with(@href, \"https://www.piapro.jp/content/relate_movie/\")]" +
+				"|//a[starts-with(@href, \"https://piapro.jp/content_list_recommend/\")]"
 			);
 
-			var relatedMovieMatch = relatedMovieSpan != null ? Regex.Match(relatedMovieSpan.Attributes["href"].Value, @"https?://(?:www\.)?piapro\.jp/content/relate_movie/\?id=([\d\w]+)") : null;
+			var relatedMovieMatch = relatedMovieSpan != null ? Regex.Match(relatedMovieSpan.Attributes["href"].Value, @"https?://(?:www\.)?piapro\.jp/content(?:/relate_movie|_list_recommend)/\?id=([\d\w]+)") : null;
 			var contentId = relatedMovieMatch != null && relatedMovieMatch.Success ? relatedMovieMatch.Groups[1].Value : null;
 
 			if (contentId == null) {
