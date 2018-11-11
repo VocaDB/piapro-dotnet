@@ -76,6 +76,32 @@ namespace PiaproClient {
 
 		}
 
+		private string GetContentId(HtmlDocument doc) {
+
+			// Find both piapro.jp and www.piapro.jp
+			// Note: HtmlAgilityPack does not support regex (XPath 2.0) :(
+			var relatedMovieSpan = doc.DocumentNode.SelectSingleNode(
+				"//a[starts-with(@href, \"http://piapro.jp/content/relate_movie/\")]" +
+				"|//a[starts-with(@href, \"http://www.piapro.jp/content/relate_movie/\")]" +
+				"|//a[starts-with(@href, \"https://piapro.jp/content/relate_movie/\")]" +
+				"|//a[starts-with(@href, \"https://www.piapro.jp/content/relate_movie/\")]" +
+				"|//a[starts-with(@href, \"https://piapro.jp/content_list_recommend/\")]"
+			);
+
+			var relatedMovieMatch = relatedMovieSpan != null ? Regex.Match(relatedMovieSpan.Attributes["href"].Value, @"https?://(?:www\.)?piapro\.jp/content(?:/relate_movie|_list_recommend)/\?id=([\d\w]+)") : null;
+			var contentId = relatedMovieMatch != null && relatedMovieMatch.Success ? relatedMovieMatch.Groups[1].Value : null;
+			return contentId;
+
+		}
+
+		private string GetUploadTimestamp(HtmlDocument doc) {
+
+			var uploadTimestampElem = doc.DocumentNode.SelectSingleNode("//script[@type = 'application/javascript']");
+			var uploadTimestampMatch = uploadTimestampElem != null ? Regex.Match(uploadTimestampElem.InnerText, "createDate\\s*:\\s*['\"]([0-9]{14})['\"]") : null;
+			return uploadTimestampMatch != null && uploadTimestampMatch.Success ? uploadTimestampMatch.Groups[1].Value : null;
+
+		}
+
 		/// <summary>
 		/// Parses a Piapro HTML document.
 		/// </summary>
@@ -108,19 +134,7 @@ namespace PiaproClient {
 			}
 
 			var date = GetDate(dataElem);
-
-			// Find both piapro.jp and www.piapro.jp
-			// Note: HtmlAgilityPack does not support regex (XPath 2.0) :(
-			var relatedMovieSpan = doc.DocumentNode.SelectSingleNode(
-				"//a[starts-with(@href, \"http://piapro.jp/content/relate_movie/\")]" +
-				"|//a[starts-with(@href, \"http://www.piapro.jp/content/relate_movie/\")]" +
-				"|//a[starts-with(@href, \"https://piapro.jp/content/relate_movie/\")]" +
-				"|//a[starts-with(@href, \"https://www.piapro.jp/content/relate_movie/\")]" +
-				"|//a[starts-with(@href, \"https://piapro.jp/content_list_recommend/\")]"
-			);
-
-			var relatedMovieMatch = relatedMovieSpan != null ? Regex.Match(relatedMovieSpan.Attributes["href"].Value, @"https?://(?:www\.)?piapro\.jp/content(?:/relate_movie|_list_recommend)/\?id=([\d\w]+)") : null;
-			var contentId = relatedMovieMatch != null && relatedMovieMatch.Success ? relatedMovieMatch.Groups[1].Value : null;
+			var contentId = GetContentId(doc);
 
 			if (contentId == null) {
 				throw new PiaproException("Could not find id element on page.");
@@ -137,10 +151,6 @@ namespace PiaproClient {
 			var authorElem = doc.DocumentNode.SelectSingleNode("//a[@class = 'cd_user-name']");
 			var author = (authorElem != null ? RemoveHonorific(authorElem.InnerText) : string.Empty);
 
-			var uploadTimestampElem = doc.DocumentNode.SelectSingleNode("//script[@type = 'application/javascript']");
-			var uploadTimestampMatch = uploadTimestampElem != null ? Regex.Match(uploadTimestampElem.InnerText, "createDate\\s*:\\s*['\"]([0-9]{14})['\"]") : null;
-			var uploadTimestamp = uploadTimestampMatch != null && uploadTimestampMatch.Success ? uploadTimestampMatch.Groups[1].Value : null;
-
 			return new PostQueryResult {
 				Author = author,
 				Id = contentId,
@@ -149,7 +159,7 @@ namespace PiaproClient {
 				Title = title,
 				Url = url,
 				Date = date,
-				UploadTimestamp = uploadTimestamp
+				UploadTimestamp = GetUploadTimestamp(doc)
 			};
 
 		}
