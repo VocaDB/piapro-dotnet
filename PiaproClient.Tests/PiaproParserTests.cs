@@ -16,14 +16,15 @@ namespace PiaproClient.Tests {
 
 		/// <summary>
 		/// Source: https://piapro.jp/content/61zc7sceslg04gcx
+		/// Normal use case.
 		/// </summary>
 		private HtmlDocument SongDocument => ResourceHelper.ReadHtmlDocument(ResourceHelper.TestDocumentName, Encoding.UTF8);
 		private HtmlDocument SongDocumentWithWww => ResourceHelper.ReadHtmlDocument("piapro2.html", Encoding.UTF8);
 		private HtmlDocument SongDocumentWithAwardTitle => ResourceHelper.ReadHtmlDocument("piapro_award.html", Encoding.UTF8);
 		private HtmlDocument SongDocumentWithHttps => ResourceHelper.ReadHtmlDocument("piapro_https.html", Encoding.UTF8);
 		/// <summary>
-		/// Source: https://piapro.jp/t/Ux8B
-		/// No related_movie element.
+		/// Source: https://piapro.jp/t/Zh5H
+		/// No related_movie element. Get contentId from JavaScript.
 		/// </summary>
 		private HtmlDocument SongDocumentWithNoRelated => ResourceHelper.ReadHtmlDocument("piapro_norelated.html", Encoding.UTF8);
 
@@ -45,7 +46,7 @@ namespace PiaproClient.Tests {
 
 		[TestMethod]
 		public void Id_NoRelated() {
-			Assert.AreEqual("3c9ofjj7dlwb9gah", ParseDocumentWithNoRelated().Id, "Id");
+			Assert.AreEqual("xmitpgv0t5dwi2ln", ParseDocumentWithNoRelated().Id, "Id");
 		}
 
 		[TestMethod]

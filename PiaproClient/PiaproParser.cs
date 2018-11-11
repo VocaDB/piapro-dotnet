@@ -90,14 +90,21 @@ namespace PiaproClient {
 
 			var relatedMovieMatch = relatedMovieSpan != null ? Regex.Match(relatedMovieSpan.Attributes["href"].Value, @"https?://(?:www\.)?piapro\.jp/content(?:/relate_movie|_list_recommend)/\?id=([\d\w]+)") : null;
 			var contentId = relatedMovieMatch != null && relatedMovieMatch.Success ? relatedMovieMatch.Groups[1].Value : null;
-			return contentId;
+
+			if (!string.IsNullOrEmpty(contentId))
+				return contentId;
+
+			// No anchor element, attempt to find contentId from script element.
+			var scriptElem = doc.DocumentNode.SelectSingleNode("//script[@type = 'application/javascript']");
+			var contentIdMatch = scriptElem != null ? Regex.Match(scriptElem.InnerText, @"contentId\s*:\s*['\""]([a-z0-9]+)['\""]") : null;
+			return contentIdMatch != null && contentIdMatch.Success ? contentIdMatch.Groups[1].Value : null;
 
 		}
 
 		private string GetUploadTimestamp(HtmlDocument doc) {
 
-			var uploadTimestampElem = doc.DocumentNode.SelectSingleNode("//script[@type = 'application/javascript']");
-			var uploadTimestampMatch = uploadTimestampElem != null ? Regex.Match(uploadTimestampElem.InnerText, "createDate\\s*:\\s*['\"]([0-9]{14})['\"]") : null;
+			var scriptElem = doc.DocumentNode.SelectSingleNode("//script[@type = 'application/javascript']");
+			var uploadTimestampMatch = scriptElem != null ? Regex.Match(scriptElem.InnerText, "createDate\\s*:\\s*['\"]([0-9]{14})['\"]") : null;
 			return uploadTimestampMatch != null && uploadTimestampMatch.Success ? uploadTimestampMatch.Groups[1].Value : null;
 
 		}
