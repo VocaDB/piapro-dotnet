@@ -8,6 +8,14 @@ namespace PiaproClient {
 	public class PostQueryResult {
 
 		/// <summary>
+		/// URL to artwork, if any.
+		/// For example "https://cdn.piapro.jp/thumb_i/5i/5i20uhj17deukmea_20110212213034_0500_0500.jpg"
+		/// Note: for generic/missing artwork, this will be empty.
+		/// Cannot be null. Can be empty if there is no artwork.
+		/// </summary>
+		public string ArtworkUrl { get; set; }
+
+		/// <summary>
 		/// Author's nickname (ニックネーム), for example "ハチ".
 		/// Cannot be null. Can be empty if author information could not be parsed.
 		/// </summary>

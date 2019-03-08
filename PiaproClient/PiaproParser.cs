@@ -109,6 +109,12 @@ namespace PiaproClient {
 
 		}
 
+		private string GetArtworkUrl(HtmlDocument doc) {
+			var artworkElem = doc.DocumentNode.SelectSingleNode("/html/head/meta[@name = 'twitter:image']");
+			var artworkUrl = artworkElem?.Attributes["content"]?.Value ?? string.Empty;
+			return artworkUrl.StartsWith("https://res.piapro.jp/images/card_chara/") ? string.Empty : artworkUrl;
+		}
+
 		/// <summary>
 		/// Parses a Piapro HTML document.
 		/// </summary>
@@ -158,6 +164,8 @@ namespace PiaproClient {
 			var authorElem = doc.DocumentNode.SelectSingleNode("//a[@class = 'cd_user-name']");
 			var authorName = authorElem != null ? RemoveHonorific(authorElem.InnerText) : string.Empty;
 			var authorID = authorElem != null ? authorElem.Attributes["href"]?.Value.Substring(1) : string.Empty;
+			
+			var artworkUrl = GetArtworkUrl(doc);
 
 			return new PostQueryResult {
 				Author = authorName,
@@ -168,6 +176,7 @@ namespace PiaproClient {
 				Title = title,
 				Url = url,
 				Date = date,
+				ArtworkUrl = artworkUrl,
 				UploadTimestamp = GetUploadTimestamp(doc)
 			};
 

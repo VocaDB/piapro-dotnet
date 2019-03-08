@@ -20,6 +20,7 @@ namespace PiaproClient.Tests {
 		/// </summary>
 		private HtmlDocument SongDocument => ResourceHelper.ReadHtmlDocument(ResourceHelper.TestDocumentName, Encoding.UTF8);
 		private HtmlDocument SongDocumentWithWww => ResourceHelper.ReadHtmlDocument("piapro2.html", Encoding.UTF8);
+		private HtmlDocument SongDocumentWithNoArtwork => ResourceHelper.ReadHtmlDocument("piapro2.html", Encoding.UTF8);
 		private HtmlDocument SongDocumentWithAwardTitle => ResourceHelper.ReadHtmlDocument("piapro_award.html", Encoding.UTF8);
 		private HtmlDocument SongDocumentWithHttps => ResourceHelper.ReadHtmlDocument("piapro_https.html", Encoding.UTF8);
 		/// <summary>
@@ -30,6 +31,7 @@ namespace PiaproClient.Tests {
 
 		private PostQueryResult ParseDocument() => parser.ParseDocument(SongDocument, "http://");
 		private PostQueryResult ParseDocumentWithWww() => parser.ParseDocument(SongDocumentWithWww, "http://");
+		private PostQueryResult ParseDocumentWithNoArtwork() => parser.ParseDocument(SongDocumentWithNoArtwork, "http://");
 		private PostQueryResult ParseDocumentWithAwardTitle() => parser.ParseDocument(SongDocumentWithAwardTitle, "http://");
 		private PostQueryResult ParseDocumentWithHttps() => parser.ParseDocument(SongDocumentWithHttps, "https://");
 		private PostQueryResult ParseDocumentWithNoRelated() => parser.ParseDocument(SongDocumentWithNoRelated, "https://");
@@ -57,6 +59,16 @@ namespace PiaproClient.Tests {
 		[TestMethod]
 		public void Length() {
 			Assert.AreEqual(201, ParseDocument().LengthSeconds, "Length");
+		}
+
+		[TestMethod]
+		public void ArtworkUrl() {
+			Assert.AreEqual("https://cdn.piapro.jp/thumb_i/5i/5i20uhj17deukmea_20110212213034_0500_0500.jpg", ParseDocument().ArtworkUrl, "ArtworkUrl");
+		}
+
+		[TestMethod]
+		public void ArtworkUrl_Empty() {
+			Assert.AreEqual(string.Empty, ParseDocumentWithNoArtwork().ArtworkUrl, "ArtworkUrl");
 		}
 
 		[TestMethod]

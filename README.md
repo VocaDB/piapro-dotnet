@@ -10,6 +10,7 @@ Piapro client for .NET, able to download metadata about content posts.
   * Title
   * Author Piapro ID and nickname
   * Upload date
+  * Artwork
   * Length (for songs)
 
 More features will be added as needed.
