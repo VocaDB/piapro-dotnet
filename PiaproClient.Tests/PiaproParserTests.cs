@@ -65,6 +65,11 @@ namespace PiaproClient.Tests {
 		}
 
 		[TestMethod]
+		public void AuthorId() {
+			Assert.AreEqual("yakari", ParseDocument().AuthorId, "AuthorId");
+		}
+
+		[TestMethod]
 		public void PostType_Audio() {
 			Assert.AreEqual(PostType.Audio, ParseDocument().PostType, "PostType");
 		}

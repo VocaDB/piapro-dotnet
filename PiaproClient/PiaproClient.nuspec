@@ -2,14 +2,14 @@
 <package >
   <metadata>
     <id>PiaproClient</id>
-    <version>1.5.3.0</version>
+    <version>1.6.0.0</version>
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Simple .NET client for retrieving song post information from Piapro (https://piapro.jp).</description>
-    <releaseNotes>Update to support new Piapro layout.</releaseNotes>
-    <copyright>Copyright 2018</copyright>
+    <releaseNotes>Added parsing for author's Piapro ID.</releaseNotes>
+    <copyright>Copyright 2019</copyright>
 	<projectUrl>https://github.com/riipah/piapro-dotnet</projectUrl>
     <tags>Piapro</tags>
 	  <dependencies>

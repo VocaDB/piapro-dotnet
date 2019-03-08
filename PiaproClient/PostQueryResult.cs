@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace PiaproClient {
 
@@ -8,10 +8,16 @@ namespace PiaproClient {
 	public class PostQueryResult {
 
 		/// <summary>
-		/// Author name, for example "ハチ".
+		/// Author's nickname (ニックネーム), for example "ハチ".
 		/// Cannot be null. Can be empty if author information could not be parsed.
 		/// </summary>
 		public string Author { get; set; }
+
+		/// <summary>
+		/// Author's Piapro ID (ピアプロID, the URL ending), for example "yakari".
+		/// Cannot be null. Can be empty if author information could not be parsed.
+		/// </summary>
+		public string AuthorId { get; set; }
 
 		/// <summary>
 		/// Post publish date.

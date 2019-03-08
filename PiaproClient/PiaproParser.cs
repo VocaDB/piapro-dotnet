@@ -156,10 +156,12 @@ namespace PiaproClient {
 			var title = HtmlEntity.DeEntitize(titleElem.InnerText).Trim();
 
 			var authorElem = doc.DocumentNode.SelectSingleNode("//a[@class = 'cd_user-name']");
-			var author = (authorElem != null ? RemoveHonorific(authorElem.InnerText) : string.Empty);
+			var authorName = authorElem != null ? RemoveHonorific(authorElem.InnerText) : string.Empty;
+			var authorID = authorElem != null ? authorElem.Attributes["href"]?.Value.Substring(1) : string.Empty;
 
 			return new PostQueryResult {
-				Author = author,
+				Author = authorName,
+				AuthorId = authorID,
 				Id = contentId,
 				LengthSeconds = length,
 				PostType = postType,
