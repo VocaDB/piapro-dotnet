@@ -10,6 +10,7 @@
     <PackageProjectUrl>https://github.com/riipah/piapro-dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/riipah/piapro-dotnet</RepositoryUrl>
     <PackageReleaseNotes>Converted into .NET Standard. Avoid modifying HttpClient, use HttpRequestMessage instead.</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
