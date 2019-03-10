@@ -3,7 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 
@@ -98,12 +100,18 @@ namespace PiaproClient {
 				throw new PiaproException("Invalid Piapro URL", x);
 			}
 
+			// From https://stackoverflow.com/a/12023307
+			var request = new HttpRequestMessage(HttpMethod.Get, uri);
+			request.Headers.UserAgent.Add(new ProductInfoHeaderValue("PiaproClient", "2.0"));
+
+			// From https://stackoverflow.com/a/46877380
+			var cts = new CancellationTokenSource();
+			cts.CancelAfter(TimeSpan.FromSeconds(1000));
+
 			HttpResponseMessage response;
-			var client = HttpClient;
-			client.Timeout = TimeSpan.FromSeconds(10000);
 
 			try {
-				response = await client.GetAsync(uri);
+				response = await HttpClient.SendAsync(request, cts.Token);
 				response.EnsureSuccessStatusCode();
 			} catch (HttpRequestException x) {
 				throw new PiaproException("Unable to get a response from the server, try again later", x);
