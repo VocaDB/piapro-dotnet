@@ -157,3 +157,4 @@ $RECYCLE.BIN/
 packages/
 /Create nuget.cmd
 /.vs/
+/nuget.exe

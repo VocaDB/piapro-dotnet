@@ -1,0 +1,1 @@
+nuget.exe pack PiaproClient\PiaproClient.csproj -Properties Configuration=Release -OutputDirectory publish
