@@ -1,9 +1,11 @@
 piapro-dotnet
 =============
 
-Piapro client for .NET, able to download metadata about content posts.
+[Piapro](https://piapro.jp/) client for .NET, able to download metadata about content posts.
 
 Compatible with .NET Standard 2.0.
+
+Since Piapro has no API, the client relies on HTML scraping.
 
 ### Features
 * Piapro URL testing (whether a specific URL is a possible Piapro content post)
