@@ -27,6 +27,11 @@ namespace PiaproClient {
 			this.httpClient = httpClient;
 		}
 
+		/// <summary>
+		/// Request timeout. Default value is 1 second.
+		/// </summary>
+		public TimeSpan RequestTimeout { get; set; } = TimeSpan.FromMilliseconds(1000);
+
 		private readonly HttpClient httpClient;
 
 		private HttpClient HttpClient => httpClient ?? new HttpClient();
@@ -104,17 +109,18 @@ namespace PiaproClient {
 			var request = new HttpRequestMessage(HttpMethod.Get, uri);
 			request.Headers.UserAgent.Add(new ProductInfoHeaderValue("PiaproClient", "2.0"));
 
-			// From https://stackoverflow.com/a/46877380
-			var cts = new CancellationTokenSource();
-			cts.CancelAfter(TimeSpan.FromSeconds(1000));
-
 			HttpResponseMessage response;
 
-			try {
-				response = await HttpClient.SendAsync(request, cts.Token);
-				response.EnsureSuccessStatusCode();
-			} catch (HttpRequestException x) {
-				throw new PiaproException("Unable to get a response from the server, try again later", x);
+			// From https://stackoverflow.com/a/46877380
+			using (var cts = new CancellationTokenSource()) {
+				cts.CancelAfter(RequestTimeout);
+
+				try {
+					response = await HttpClient.SendAsync(request, cts.Token);
+					response.EnsureSuccessStatusCode();
+				} catch (HttpRequestException x) {
+					throw new PiaproException("Unable to get a response from the server, try again later", x);
+				}
 			}
 
 			response.Content.Headers.TryGetValues("Content-Encoding", out var encodingHeaders);
