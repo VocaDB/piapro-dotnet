@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PiaproClient</name>
+    </assembly>
+    <members>
+        <member name="T:VocaDb.PiaproClient.PiaproClient">
+            <summary>
+            Client for accessing Piapro.
+            </summary>
+        </member>
+        <member name="P:VocaDb.PiaproClient.PiaproClient.RequestTimeout">
+            <summary>
+            Request timeout. Default value is 1 second.
+            </summary>
+        </member>
+        <member name="M:VocaDb.PiaproClient.PiaproClient.MakeLink(System.String)">
+            <summary>
+            Makes a proper URL from a possible URL without a http:// prefix.
+            </summary>
+            <param name="partialLink">Partial URL. Can be null.</param>
+            <returns>Full URL including http://. Can be null if source was null.</returns>
+        </member>
+        <member name="M:VocaDb.PiaproClient.PiaproClient.ParseByUrlAsync(System.String)">
+            <summary>
+            Parses a Piapro post specified by an URL.
+            </summary>
+            <param name="url">URL to Piapro post. Cannot be null or empty..</param>
+            <returns>Result of the query. Cannot be null.</returns>
+            <remarks>
+            At least ID and title will be parsed.
+            Author and length are optional.
+            </remarks>
+            <exception cref="T:VocaDb.PiaproClient.PiaproException">If the query failed.</exception>
+        </member>
+        <member name="M:VocaDb.PiaproClient.PiaproClient.ParseByUrl(System.String)">
+            <summary>
+            Parses a Piapro post specified by an URL.
+            </summary>
+            <param name="url">URL to Piapro post. Cannot be null or empty..</param>
+            <returns>Result of the query. Cannot be null.</returns>
+            <remarks>
+            At least ID and title will be parsed.
+            Author and length are optional.
+            </remarks>
+            <exception cref="T:VocaDb.PiaproClient.PiaproException">If the query failed.</exception>
+        </member>
+        <member name="T:VocaDb.PiaproClient.PiaproException">
+            <summary>
+            Exception thrown if the query failed.
+            </summary>
+        </member>
+        <member name="T:VocaDb.PiaproClient.PiaproParser">
+            <summary>
+            Parses Piapro HTML document.
+            </summary>
+        </member>
+        <member name="M:VocaDb.PiaproClient.PiaproParser.RemoveHonorific(System.String)">
+            <summary>
+            Removes "さん" from the username, which piapro appends automatically.
+            </summary>
+            <param name="name">Username with possible honorific, for example "Rinさん".</param>
+            <returns>Úsername without the honorific, for example "Rin".</returns>
+        </member>
+        <member name="M:VocaDb.PiaproClient.PiaproParser.ParseDocument(HtmlAgilityPack.HtmlDocument,System.String)">
+            <summary>
+            Parses a Piapro HTML document.
+            </summary>
+            <param name="doc">HTML document. Cannot be null.</param>
+            <param name="url">URL of the post. Cannot be null or empty.</param>
+            <returns>Query result. Cannot be null.</returns>
+            <remarks>
+            At least ID and title will be parsed.
+            Author and length are optional.
+            </remarks>
+            <exception cref="T:VocaDb.PiaproClient.PiaproException">If the query failed.</exception>
+        </member>
+        <member name="T:VocaDb.PiaproClient.PiaproUrlHelper">
+            <summary>
+            Helper methods for Piapro URLs.
+            </summary>
+        </member>
+        <member name="M:VocaDb.PiaproClient.PiaproUrlHelper.IsValidContentUrl(System.String)">
+            <summary>
+            Tests whether an URL is a valid Piapro content URL.
+            </summary>
+            <param name="url">URL to be tested. Can be null or empty.</param>
+            <returns>True if the URL is valid, otherwise false.</returns>
+        </member>
+        <member name="T:VocaDb.PiaproClient.PostQueryResult">
+            <summary>
+            Result of a song post parsing.
+            </summary>
+        </member>
+        <member name="P:VocaDb.PiaproClient.PostQueryResult.ArtworkUrl">
+            <summary>
+            URL to artwork, if any.
+            For example "https://cdn.piapro.jp/thumb_i/5i/5i20uhj17deukmea_20110212213034_0500_0500.jpg"
+            Note: for generic/missing artwork, this will be empty.
+            Cannot be null. Can be empty if there is no artwork.
+            </summary>
+        </member>
+        <member name="P:VocaDb.PiaproClient.PostQueryResult.Author">
+            <summary>
+            Author's nickname (ニックネーム), for example "ハチ".
+            Cannot be null. Can be empty if author information could not be parsed.
+            </summary>
+        </member>
+        <member name="P:VocaDb.PiaproClient.PostQueryResult.AuthorId">
+            <summary>
+            Author's Piapro ID (ピアプロID, the URL ending), for example "yakari".
+            Cannot be null. Can be empty if author information could not be parsed.
+            </summary>
+        </member>
+        <member name="P:VocaDb.PiaproClient.PostQueryResult.Date">
+            <summary>
+            Post publish date.
+            </summary>
+        </member>
+        <member name="P:VocaDb.PiaproClient.PostQueryResult.Id">
+            <summary>
+            Post ID in the long format, for example "61zc7sceslg04gcx".
+            Cannot be null or empty.
+            </summary>
+        </member>
+        <member name="P:VocaDb.PiaproClient.PostQueryResult.LengthSeconds">
+            <summary>
+            Audio length in seconds.
+            Can be null if the length could not be parsed.
+            </summary>
+        </member>
+        <member name="P:VocaDb.PiaproClient.PostQueryResult.PostType">
+            <summary>
+            Type of post.
+            </summary>
+        </member>
+        <member name="P:VocaDb.PiaproClient.PostQueryResult.Title">
+            <summary>
+            Post title, for example "マトリョシカ　オケ".
+            Cannot be null or empty.
+            </summary>
+        </member>
+        <member name="P:VocaDb.PiaproClient.PostQueryResult.Url">
+            <summary>
+            The parsed URL.
+            Cannot be null or empty.
+            </summary>
+        </member>
+        <member name="P:VocaDb.PiaproClient.PostQueryResult.UploadTimestamp">
+            <summary>
+            Upload timestamp. Required for the HTML5 player.
+            For example "20140906145909"
+            </summary>
+        </member>
+    </members>
+</doc>
