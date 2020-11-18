@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 
-namespace PiaproClient {
+namespace VocaDb.PiaproClient {
 
 	/// <summary>
 	/// Client for accessing Piapro.

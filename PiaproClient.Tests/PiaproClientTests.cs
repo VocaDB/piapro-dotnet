@@ -5,9 +5,9 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PiaproClient.Tests.TestSupport;
+using VocaDb.PiaproClient.Tests.TestData;
 
-namespace PiaproClient.Tests {
+namespace VocaDb.PiaproClient.Tests {
 
 	/// <summary>
 	/// Tests for <see cref="PiaproClient"/>.

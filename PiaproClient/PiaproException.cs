@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Runtime.Serialization;
 
-namespace PiaproClient {
+namespace VocaDb.PiaproClient {
 
 	/// <summary>
 	/// Exception thrown if the query failed.

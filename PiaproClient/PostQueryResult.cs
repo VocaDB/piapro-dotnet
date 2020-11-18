@@ -1,6 +1,6 @@
 using System;
 
-namespace PiaproClient {
+namespace VocaDb.PiaproClient {
 
 	/// <summary>
 	/// Result of a song post parsing.

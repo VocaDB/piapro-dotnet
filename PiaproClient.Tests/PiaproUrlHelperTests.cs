@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace PiaproClient.Tests {
+namespace VocaDb.PiaproClient.Tests {
 
 	/// <summary>
 	/// Tests for <see cref="PiaproUrlHelper"/>.

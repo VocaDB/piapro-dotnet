@@ -12,6 +12,7 @@
     <PackageReleaseNotes>Allow configuring timeout.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>piapro</PackageTags>
+    <RootNamespace>VocaDb.PiaproClient</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

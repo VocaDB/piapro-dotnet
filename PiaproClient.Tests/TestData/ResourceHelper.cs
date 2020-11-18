@@ -2,7 +2,7 @@ using System.IO;
 using System.Text;
 using HtmlAgilityPack;
 
-namespace PiaproClient.Tests.TestSupport {
+namespace VocaDb.PiaproClient.Tests.TestData {
 	
 	/// <summary>
 	/// Helper methods for managing resources
@@ -12,7 +12,7 @@ namespace PiaproClient.Tests.TestSupport {
 		public static Stream GetFileStream(string fileName) {
 
 			var asm = typeof(ResourceHelper).Assembly;
-			return asm.GetManifestResourceStream(asm.GetName().Name + ".TestData." + fileName);
+			return asm.GetManifestResourceStream($"{typeof(ResourceHelper).Namespace}.{fileName}");
 
 		}
 

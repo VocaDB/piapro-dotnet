@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace PiaproClient {
+namespace VocaDb.PiaproClient {
 
 	/// <summary>
 	/// Helper methods for Piapro URLs.

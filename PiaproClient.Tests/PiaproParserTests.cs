@@ -2,9 +2,9 @@ using System;
 using System.Text;
 using HtmlAgilityPack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PiaproClient.Tests.TestSupport;
+using VocaDb.PiaproClient.Tests.TestData;
 
-namespace PiaproClient.Tests {
+namespace VocaDb.PiaproClient.Tests {
 
 	/// <summary>
 	/// Tests for <see cref="PiaproParser"/>.

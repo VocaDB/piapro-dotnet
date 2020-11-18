@@ -6,7 +6,7 @@
     <ProjectGuid>{05494C06-77A4-4B69-B74C-22190A6953F4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PiaproClient.Tests</RootNamespace>
+    <RootNamespace>VocaDb.PiaproClient.Tests</RootNamespace>
     <AssemblyName>PiaproClient.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -60,7 +60,7 @@
     <Compile Include="PiaproParserTests.cs" />
     <Compile Include="PiaproUrlHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestSupport\ResourceHelper.cs" />
+    <Compile Include="TestData\ResourceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TestData\piapro.htm" />

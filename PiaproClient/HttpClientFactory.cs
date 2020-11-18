@@ -1,6 +1,6 @@
 using System.Net.Http;
 
-namespace PiaproClient {
+namespace VocaDb.PiaproClient {
 
 	public interface IHttpClientFactory {
 		HttpClient HttpClient { get;}
