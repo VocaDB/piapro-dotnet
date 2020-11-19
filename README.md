@@ -22,7 +22,7 @@ More features will be added as needed.
 ### Installing
 
 ```
-PM> Install-Package PiaproClient
+PM> Install-Package VocaDb.PiaproClient
 ```
 
 ### Usage
