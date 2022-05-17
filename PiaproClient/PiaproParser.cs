@@ -1,5 +1,6 @@
 using HtmlAgilityPack;
 using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace VocaDb.PiaproClient {
@@ -28,7 +29,12 @@ namespace VocaDb.PiaproClient {
 
 		}
 
-		private DateTime? GetDate(HtmlNode dataElem) {
+		private DateTime? GetDate(string url, HtmlNode dataElem)
+		{
+			var urlResult = GetDateFromUrl(url);
+
+			if (urlResult != null)
+				return urlResult;
 
 			if (dataElem == null)
 				return null;
@@ -45,6 +51,20 @@ namespace VocaDb.PiaproClient {
 			else
 				return null;
 
+		}
+
+		private DateTime? GetDateFromUrl(string url) {
+			var match = new Regex(@".*piapro.jp/t/[\w\-]+/(\d+)").Match(url); // "20100927004224" => "2010/09/27 00:42:24"
+			
+			if (!match.Success)
+				return null;
+
+			DateTime result;
+			
+			if (DateTime.TryParseExact(match.Groups[1].Value, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
+				return result;
+			
+			return null;
 		}
 
 		private int? GetLength(HtmlNode dataElem) {
@@ -146,7 +166,7 @@ namespace VocaDb.PiaproClient {
 				postType = PostType.Illustration;
 			}
 
-			var date = GetDate(dataElem);
+			var date = GetDate(url, dataElem);
 			var contentId = GetContentId(doc);
 
 			if (contentId == null) {
